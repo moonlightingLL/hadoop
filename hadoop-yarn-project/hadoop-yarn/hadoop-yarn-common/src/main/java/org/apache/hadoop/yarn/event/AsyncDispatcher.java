@@ -179,6 +179,11 @@ public class AsyncDispatcher extends AbstractService implements Dispatcher {
                     YARN_DISPATCHER_PRINT_EVENTS_INFO_THRESHOLD,
             YarnConfiguration.
                     DEFAULT_YARN_DISPATCHER_PRINT_EVENTS_INFO_THRESHOLD);
+    if (detailsInterval <= 0) {
+      throw new IllegalStateException("detailsInterval <= 0; Check " + YarnConfiguration.
+      YARN_DISPATCHER_PRINT_EVENTS_INFO_THRESHOLD
+        + " setting and/or server java heap size");
+    }
   }
 
   @Override
@@ -316,6 +321,7 @@ public class AsyncDispatcher extends AbstractService implements Dispatcher {
         lastEventQueueSizeLogged = qSize;
         LOG.info("Size of event-queue is " + qSize);
       }
+
       if (qSize != 0 && qSize % detailsInterval == 0
               && lastEventDetailsQueueSizeLogged != qSize) {
         lastEventDetailsQueueSizeLogged = qSize;
