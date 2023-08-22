@@ -82,6 +82,9 @@ public abstract class ZKDelegationTokenSecretManager<TokenIdent extends Abstract
   private static final String ZK_CONF_PREFIX = "zk-dt-secret-manager.";
   public static final String ZK_DTSM_ZK_NUM_RETRIES = ZK_CONF_PREFIX
       + "zkNumRetries";
+  {  if (Integer.parseInt(ZK_DTSM_ZK_NUM_RETRIES) <= 0) {
+    throw new IllegalArgumentException("Invalid value for zkNumRetries: " + Integer.parseInt(ZK_DTSM_ZK_NUM_RETRIES) + ". It must be greater than 0.");
+  }}
   public static final String ZK_DTSM_ZK_SESSION_TIMEOUT = ZK_CONF_PREFIX
       + "zkSessionTimeout";
   public static final String ZK_DTSM_ZK_CONNECTION_TIMEOUT = ZK_CONF_PREFIX
