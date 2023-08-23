@@ -344,11 +344,15 @@ public class ShuffleSchedulerImpl<K,V> implements ShuffleScheduler<K,V> {
   private void checkAndInformMRAppMaster(
       int failures, TaskAttemptID mapId, boolean readError,
       boolean connectExcpt, boolean hostFailed) {
-    if (connectExcpt || (reportReadErrorImmediately && readError)
-        || ((failures % maxFetchFailuresBeforeReporting) == 0) || hostFailed) {
-      LOG.info("Reporting fetch failure for " + mapId + " to MRAppMaster.");
-      status.addFetchFailedMap((org.apache.hadoop.mapred.TaskAttemptID) mapId);
-    }
+      if (maxFetchFailuresBeforeReporting <= 0) {
+        throw new IllegalStateException("maxFetchFailuresBeforeReporting <= 0; Check " + MRJobConfig.SHUFFLE_FETCH_FAILURES
+          + " setting and/or server java heap size");
+      }
+      if (connectExcpt || (reportReadErrorImmediately && readError)
+          || ((failures % maxFetchFailuresBeforeReporting) == 0) || hostFailed) {
+        LOG.info("Reporting fetch failure for " + mapId + " to MRAppMaster.");
+        status.addFetchFailedMap((org.apache.hadoop.mapred.TaskAttemptID) mapId);
+      }
   }
 
   private void checkReducerHealth() {
