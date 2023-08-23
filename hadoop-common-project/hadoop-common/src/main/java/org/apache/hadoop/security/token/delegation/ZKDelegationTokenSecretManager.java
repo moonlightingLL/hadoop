@@ -204,6 +204,10 @@ public abstract class ZKDelegationTokenSecretManager<TokenIdent extends Abstract
                 ZK_DTSM_ZK_SESSION_TIMEOUT_DEFAULT);
         int numRetries =
             conf.getInt(ZK_DTSM_ZK_NUM_RETRIES, ZK_DTSM_ZK_NUM_RETRIES_DEFAULT);
+        if (numRetries <= 0) {
+          throw new IllegalStateException("numRetries <= 0; Check " + ZK_DTSM_ZK_NUM_RETRIES
+            + " setting and/or server java heap size");
+        }
         builder =
             CuratorFrameworkFactory
                 .builder()

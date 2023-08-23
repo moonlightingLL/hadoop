@@ -185,7 +185,11 @@ public class AsyncDispatcher extends AbstractService implements Dispatcher {
                     YARN_DISPATCHER_PRINT_EVENTS_INFO_THRESHOLD,
             YarnConfiguration.
                     DEFAULT_YARN_DISPATCHER_PRINT_EVENTS_INFO_THRESHOLD);
-
+    if (detailsInterval <= 0) {
+      throw new IllegalStateException("detailsInterval <= 0; Check " + YarnConfiguration.
+      YARN_DISPATCHER_PRINT_EVENTS_INFO_THRESHOLD
+        + " setting and/or server java heap size");
+    }
     ThreadFactory threadFactory = new ThreadFactoryBuilder()
         .setNameFormat("PrintEventDetailsThread #%d")
         .build();
